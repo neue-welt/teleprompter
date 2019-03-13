@@ -169,7 +169,7 @@ aside.sidebar li > a {
 }
 
 aside.sidebar li > a:hover > span,
-aside.sidebar li > a:focus > span, {
+aside.sidebar li > a:focus > span {
   color: #31D8A0;
 }
 
@@ -240,4 +240,10 @@ main.chat .message p.message-header span.sent-date {
 
 [v-cloak] {
   display: none;
+}
+
+.spinner {
+  background-image: url(https://www.merlett.com/wp-content/themes/merlett/images/blank.gif);
+  background-position: center center;
+  background-repeat: no-repeat;
 }

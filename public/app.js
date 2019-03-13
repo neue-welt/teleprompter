@@ -12,7 +12,7 @@ client.configure(feathers.socketio(socket));
 const chatHTML = `<main class="flex flex-column">
   <div class="flex flex-row flex-1 clear">
     <div class="flex flex-column col col-12">
-      <main class="chat flex flex-column flex-1 clear"></main>
+      <main class="chat flex flex-column flex-center flex-1 clear"></main>
 
       <form class="flex flex-row flex-space-between" id="send-message">
         <input type="text" name="text" class="flex flex-1">
@@ -40,16 +40,22 @@ const addMessage = message => {
   const text = escapeHtml(message.text);
   // Escape HTML, can be removed after adding validation on user registration.
   // const user_email = escapeHtml(user.email);
-
-  chat.append(`<div class="message flex flex-row">
-    <div class="message-wrapper">
-      <p class="message-header">
-        <span class="username font-600">${user}</span>
-        <span class="sent-date font-300">${moment(message.createdAt).format('MMM Do, hh:mm:ss')}</span>
-      </p>
-      <p class="message-content font-300">${text}</p>
-    </div>
-  </div>`);
+  if(user !== 'You') {
+    chat.html(`<div class="message flex flex-row">
+      <div class="message-wrapper ${user}">
+        <p class="message-content font-300">${text}</p>
+      </div>
+    </div>`);
+  } else if (user === 'system'){
+    chat.html(`<div class="message flex flex-row">
+      <div class="message-wrapper ${user}">
+        <p class="message-content font-300">${text}</p>
+      </div>
+    </div>`);
+  } else {
+    chat.html(`<div class="flex flex-column flex-center text-justify flex-1 spinner">
+    </div>`);
+  }
 
   chat.scrollTop(chat[0].scrollHeight - chat[0].clientHeight);
 };
@@ -71,6 +77,14 @@ const showChat = async () => {
   messages.data.reverse().forEach(addMessage);
 };
 
+const showSystemMessage = async () => {
+  $('#app').html(chatHTML);
+  const system = {
+    user: 'system',
+    text: 'Hi,here is a chatbot. Ask me something!'
+  };
+  addMessage(system);
+}
 
 // Set up event listeners
 $(document)
@@ -91,4 +105,6 @@ $(document)
 // Listen to created events and add the new message in real-time
 client.service('messages').on('created', addMessage);
 
-showChat();
+// showChat();
+
+showSystemMessage();
