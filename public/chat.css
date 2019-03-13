@@ -247,3 +247,7 @@ main.chat .message p.message-header span.sent-date {
   background-position: center center;
   background-repeat: no-repeat;
 }
+
+.bot #send-message {
+  display: none;
+}

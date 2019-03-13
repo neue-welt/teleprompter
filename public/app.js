@@ -40,7 +40,8 @@ const addMessage = message => {
   const text = escapeHtml(message.text);
   // Escape HTML, can be removed after adding validation on user registration.
   // const user_email = escapeHtml(user.email);
-  if(user !== 'You') {
+  if(user === 'Bot') {
+    $('body').toggleClass('bot');
     chat.html(`<div class="message flex flex-row">
       <div class="message-wrapper ${user}">
         <p class="message-content font-300">${text}</p>
@@ -53,6 +54,7 @@ const addMessage = message => {
       </div>
     </div>`);
   } else {
+    $('body').toggleClass('bot');
     chat.html(`<div class="flex flex-column flex-center text-justify flex-1 spinner">
     </div>`);
   }
