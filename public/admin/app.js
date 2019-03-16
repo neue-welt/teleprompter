@@ -6,6 +6,8 @@ const socket = io();
 // with hooks and authentication.
 const client = feathers();
 
+const defaultUsername = 'User';
+
 client.configure(feathers.socketio(socket));
 
 // Chat base HTML (without defaultUsername list and messages)
@@ -19,8 +21,11 @@ const chatHTML = `<main class="flex flex-column">
         <button class="button-primary" type="submit">Send</button>
       </form>
     </div>
-    <div class="col-6">
-      
+    <div class="flex flex-column col-6">
+      <aside class="flex-1 clear realBot">
+        
+      </aside>
+</aside>
     </div>
   </div>
 </main>`;
@@ -40,6 +45,7 @@ const addMessage = message => {
   // Find the defaultUsername belonging to this message or use the anonymous defaultUsername if not found
   const user = message.user || 'Bot';
   const chat = $('.chat');
+  const realBot = $('.realBot');
   const text = escapeHtml(message.text);
   // Escape HTML, can be removed after adding validation on defaultUsername registration.
   // const user_email = escapeHtml(defaultUsername.email);
@@ -53,6 +59,19 @@ const addMessage = message => {
     </div>
   </div>`);
 
+  if(user == defaultUsername) {
+    const realBotText = escapeHtml(message.answer);
+
+    realBot.append(`<div class="message flex flex-row">
+    <div class="message-wrapper ${user}">
+      <p class="message-header">
+        <span class="username font-600">Barbara</span>
+        <span class="sent-date font-300">${moment(message.createdAt).format('MMM Do, hh:mm:ss')}</span>
+      </p>
+      <p class="message-content font-300">${realBotText}</p>
+    </div>
+  </div>`);
+  }
   chat.scrollTop(chat[0].scrollHeight - chat[0].clientHeight);
 };
 

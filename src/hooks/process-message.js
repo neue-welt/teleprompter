@@ -24,21 +24,44 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
       // Messages can't be longer than 400 characters
       .substring(0, 400);
 
-    console.log(text);
-    return aimlInterpreter.findAnswerInLoadedAIMLFiles(text, function(answer, wildCardArray, input) {
+    if(data.user === 'User') {
+      try {
+        return aimlInterpreter.findAnswerInLoadedAIMLFiles(text, function (answer, wildCardArray, input) {
+          // Override the original data (so that people can't submit additional stuff)
+          if(typeof answer === 'undefined') {
+            answer = 'There was no answer';
+          }
+          context.data = {
+            answer: answer,
+            user: data.user,
+            text: text,
+            // Add the current date
+            createdAt: new Date().getTime()
+          };
+          console.log('-> ' + input);
+          console.log('<-' + answer);
+          console.log(wildCardArray);
+          // Best practise, hooks should always return the context
+          return context;
+        });
+      } catch (e) {
+        console.log(e);
+        context.data.text = text;
+        context.data.createdAt = new Date().getTime();
+        return context;
+
+      }
+    }  else {
       // Override the original data (so that people can't submit additional stuff)
       context.data = {
-        answer: answer,
         user: data.user,
+        answer: 'No answer. You are the bot',
         text: text,
         // Add the current date
         createdAt: new Date().getTime()
       };
-      console.log(input);
-      console.log(answer);
-
       // Best practise, hooks should always return the context
       return context;
-    });
+    }
   };
 };
