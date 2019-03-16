@@ -1,9 +1,14 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-
+const fs = require('fs');
 const AIMLInterpreter = require('aimlinterpreter');
 const aimlInterpreter = new AIMLInterpreter({name:'AI-Curator', age:'6'});
-aimlInterpreter.loadAIMLFilesIntoArray([__dirname + '/../aiml/std-65percent.aiml']);
+
+const configs = [];
+fs.readdirSync(__dirname + '/../aiml/').forEach(file => {
+  configs.push(__dirname + '/../aiml/' + file);
+});
+aimlInterpreter.loadAIMLFilesIntoArray(configs);
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return async context => {
@@ -19,23 +24,18 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
       // Messages can't be longer than 400 characters
       .substring(0, 400);
 
-    // Override the original data (so that people can't submit additional stuff)
-    context.data = {
-      text,
-      user: data.user,
-      // Add the current date
-      createdAt: new Date().getTime()
-    };
-    console.log(data.text);
-    return aimlInterpreter.findAnswerInLoadedAIMLFiles(data.text, function(answer, wildCardArray, input) {
+    console.log(text);
+    return aimlInterpreter.findAnswerInLoadedAIMLFiles(text, function(answer, wildCardArray, input) {
       // Override the original data (so that people can't submit additional stuff)
       context.data = {
-        answer,
-        text: data.text,
+        answer: answer,
+        user: data.user,
+        text: text,
         // Add the current date
         createdAt: new Date().getTime()
       };
-      console.log(answer + ' | ' + wildCardArray + ' | ' + input);
+      console.log(input);
+      console.log(answer);
 
       // Best practise, hooks should always return the context
       return context;
