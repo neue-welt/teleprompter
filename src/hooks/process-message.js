@@ -38,14 +38,10 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
             // Add the current date
             createdAt: new Date().getTime()
           };
-          console.log('-> ' + input);
-          console.log('<-' + answer);
-          console.log(wildCardArray);
           // Best practise, hooks should always return the context
           return context;
         });
       } catch (e) {
-        console.log(e);
         context.data.text = text;
         context.data.createdAt = new Date().getTime();
         return context;
