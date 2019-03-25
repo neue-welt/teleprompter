@@ -26,7 +26,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
 
     if(data.user === 'User') {
       try {
-        return aimlInterpreter.findAnswerInLoadedAIMLFiles(text, function (answer, wildCardArray, input) {
+        return aimlInterpreter.findAnswerInLoadedAIMLFiles(text, function (answer) {
           // Override the original data (so that people can't submit additional stuff)
           if(typeof answer === 'undefined') {
             answer = 'There was no answer';
