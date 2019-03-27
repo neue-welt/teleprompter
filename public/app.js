@@ -17,7 +17,7 @@ const chatHTML = `<main class="flex flex-column">
       <main class="chat flex flex-column flex-center flex-1 clear"></main>
 
       <form class="flex flex-row flex-space-between" id="send-message">
-        <input type="text" name="text" class="flex flex-1 new-message">
+        <input type="text" name="text" class="flex flex-1 new-message" autofocus="autofocus" autocomplete="off">
       </form>
     </div>
   </div>
